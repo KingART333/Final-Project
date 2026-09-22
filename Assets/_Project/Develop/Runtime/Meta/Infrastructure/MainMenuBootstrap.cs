@@ -2,6 +2,9 @@
 using Assets._Project.Develop.Runtime.Infrastructure;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.UI;
+using Assets._Project.Develop.Runtime.UI.CommonViews;
+using Assets._Project.Develop.Runtime.UI.Wallet;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement;
 using Assets._Project.Develop.Runtime.Utilities.DataManagement.DataProviders;
@@ -22,6 +25,10 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
         private ICoroutinesPerformer _coroutinesPerformer;
 
+        [SerializeField] private IconTextView _currencyView;
+        private ProjectPresentersFactory _presentersFactory;
+        private CurrencyPresenter _currencyPresenter;
+
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
             _container = container;
@@ -39,9 +46,10 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
             _coroutinesPerformer = _container.Resolve<ICoroutinesPerformer>();
 
+            _presentersFactory = _container.Resolve<ProjectPresentersFactory>();
+
             yield break;
         }
-
 
         public override void Run()
         {
@@ -76,6 +84,24 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
             {
                 _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
                 Debug.Log("Saving was called");
+            }
+
+            if (Input.GetKeyUp(KeyCode.G))
+            {
+                _currencyPresenter?.Disable();
+
+                _currencyPresenter = _presentersFactory.CreateCurrencyPresenter(_currencyView, _walletService.GetCurrency(CurrencyTypes.Gold), CurrencyTypes.Gold);
+
+                _currencyPresenter.Enable();
+            }
+
+            if (Input.GetKeyUp(KeyCode.D))
+            {
+                _currencyPresenter?.Disable();
+
+                _currencyPresenter = _presentersFactory.CreateCurrencyPresenter(_currencyView, _walletService.GetCurrency(CurrencyTypes.Diamond), CurrencyTypes.Diamond);
+
+                _currencyPresenter.Enable();
             }
         }
     }
