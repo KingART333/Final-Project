@@ -68,7 +68,15 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.DI
             {
                 if(registration.IsNonLazy)
                     registration.CreateInstanceFrom(this);
+
+                registration.OnInitialize();
             }
+        }
+
+        public void Dispose()
+        {
+            foreach(Registration registration in _container.Values)
+                registration.OnDispose();
         }
     }
 }
