@@ -8,4 +8,5 @@ namespace Assets._Project.Develop.Runtime.Utilities.Reactive
 
         IDisposable Subscribe(Action<T, T> action);
     }
+
 }

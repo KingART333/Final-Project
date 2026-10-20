@@ -6,6 +6,7 @@ using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
 using System.Collections;
 using UnityEngine;
 using System;
+using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -15,6 +16,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private DIContainer _container;
         private GameplayInputArgs _inputArgs;
         private WalletService _walletService;
+
+        [SerializeField] private TestGameplay _testGameplay;
+        private EntitiesLifeContext _entitiesLifeContext;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -36,6 +40,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
             _walletService = _container.Resolve<WalletService>();
 
+            _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
+
+            _testGameplay.Initialize(_container);
+
             yield break;
         }
 
@@ -43,10 +51,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         public override void Run()
         {
             Debug.Log("Start gameplay scene");
+
+            _testGameplay.Run();
         }
 
         private void Update()
         {
+            _entitiesLifeContext?.Update(Time.deltaTime);
+
             if (Input.GetKeyDown(KeyCode.F))
             {
                 SceneSwitcherService sceneSwitcherService = _container.Resolve<SceneSwitcherService>();
