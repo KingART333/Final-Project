@@ -16,6 +16,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         private EntitiesFactory _entitiesFactory;
 
         private Entity _entity;
+        private Entity _teleporter;
 
         private bool _isRunning;
 
@@ -29,6 +30,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         {
             _entity = _entitiesFactory.CreateHero(Vector3.zero);
             _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
+            _teleporter = _entitiesFactory.CreateTeleporter(Vector3.zero + Vector3.right * 5);
 
             _isRunning = true;
         }
@@ -43,6 +45,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay
 
             if (Input.GetKeyDown(KeyCode.R))
                 _entity.StartAttackRequest.Invoke();
+
+            if (Input.GetKeyDown(KeyCode.T))
+                _teleporter.TeleportRequest.Invoke();
+
+            //for testing
+            if (Input.GetKeyDown(KeyCode.Y))
+                _teleporter.TakeDamageRequest.Invoke(50);
 
             Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
 
