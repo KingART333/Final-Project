@@ -14,6 +14,7 @@ using Assets._Project.Develop.Runtime.Utilities.DataManagement.Serializers;
 using Assets._Project.Develop.Runtime.Utilities.LoadingScreen;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
+using Assets._Project.Develop.Runtime.Utilities.Timer;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,9 +36,12 @@ namespace Assets._Project.Develop.Runtime.Infrastructure.EntryPoint
             container.RegisterAsSingle(CreatePlayerDataProvider);
             container.RegisterAsSingle(CreateProjectPresentersFactory);
             container.RegisterAsSingle(CreateViewsFactory);
+            container.RegisterAsSingle(CreateTimerService);
             container.RegisterAsSingle<ISaveLoadService>(CreateSaveLoadService);
             container.RegisterAsSingle(CreateLevelsProgressionService).NonLazy();
         }
+
+        private static TimerServiceFactory CreateTimerService(DIContainer c) => new TimerServiceFactory(c);
 
         private static LevelsProgressionService CreateLevelsProgressionService(DIContainer c) => new LevelsProgressionService(c.Resolve<PlayerDataProvider>());
         private static ViewsFactory CreateViewsFactory(DIContainer c) => new ViewsFactory(c.Resolve<ResourcesAssetsLoader>());

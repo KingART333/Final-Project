@@ -2,7 +2,7 @@
 
 namespace Assets._Project.Develop.Runtime.Utilities.Reactive
 {
-    public interface IreadonlyEvent
+    public interface IReadonlyEvent
     {
         IDisposable Subscribe(Action action);
     }

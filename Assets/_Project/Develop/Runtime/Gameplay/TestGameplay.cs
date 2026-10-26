@@ -1,4 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI.States;
 using Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using System;
@@ -14,8 +16,11 @@ namespace Assets._Project.Develop.Runtime.Gameplay
     {
         private DIContainer _container;
         private EntitiesFactory _entitiesFactory;
+        private BrainsFactory _brainsFactory;
 
         private Entity _entity;
+        private Entity _ghost;
+
 
         private bool _isRunning;
 
@@ -23,12 +28,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay
         {
             _container = container;
             _entitiesFactory = _container.Resolve<EntitiesFactory>();
+            _brainsFactory = _container.Resolve<BrainsFactory>();
         }
 
         public void Run()
         {
             _entity = _entitiesFactory.CreateHero(Vector3.zero);
-            _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
+            _entity.AddCurrentTarget();
+            _brainsFactory.CreateMainHeroBrain(_entity, new NearestDamageableTargetSelector(_entity));
+
+            _ghost = _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
 
             _isRunning = true;
         }
@@ -44,10 +53,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay
             if (Input.GetKeyDown(KeyCode.R))
                 _entity.StartAttackRequest.Invoke();
 
-            Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
-
-            _entity.MoveDirection.Value = input;
-            _entity.RotationDirection.Value = input;
+            if (Input.GetKeyDown(KeyCode.I))
+                _brainsFactory.CreateGhostBrain(_ghost);
         }
     }
 }

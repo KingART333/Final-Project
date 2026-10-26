@@ -40,7 +40,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.Reactive
     }
 
 
-    public class ReactiveEvent : IreadonlyEvent
+    public class ReactiveEvent : IReadonlyEvent
     {
         private readonly List<Subscriber> _subscribers = new();
         private readonly List<Subscriber> _toAdd = new();
