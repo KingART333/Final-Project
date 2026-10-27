@@ -15,8 +15,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
         private ICompositeCondition _canTeleport;
 
         private ReactiveVariable<float> _teleportRadius;
-        private ReactiveVariable<float> _teleportEnergyCost;
-        private ReactiveVariable<float> _currentEnergy;
 
         private Rigidbody _rigidbody;
 
@@ -29,8 +27,6 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
             _canTeleport = entity.CanTeleport;
 
             _teleportRadius = entity.TeleportRadius;
-            _teleportEnergyCost = entity.TeleportEnergyCost;
-            _currentEnergy = entity.CurrentEnergy;
 
             _rigidbody = entity.Rigidbody;
 
@@ -45,13 +41,9 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
                 return;
             }
 
-            _currentEnergy.Value -= _teleportEnergyCost.Value;
-
             Vector2 offset = Random.insideUnitCircle * _teleportRadius.Value;
 
             _rigidbody.transform.position += new Vector3(offset.x, 0f, offset.y);
-
-            Physics.SyncTransforms();
 
             Debug.Log("Teleported");
             _teleportEvent.Invoke();

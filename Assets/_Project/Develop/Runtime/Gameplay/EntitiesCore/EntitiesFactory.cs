@@ -260,6 +260,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                 .AddEnergyRegenInterval(new ReactiveVariable<float>(3))
                 .AddEnergyRegenCurrentTime()
                 .AddEnergyRegenPercent(new ReactiveVariable<float>(0.1f))
+                .AddRestoreEnergyRequest()
                 .AddTeleportRequest()
                 .AddTeleportEvent()
                 .AddTeleportRadius(new ReactiveVariable<float>(8))
@@ -283,20 +284,27 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                 .Add(new FuncCondition(() => entity.IsDead.Value == false))
                 .Add(new FuncCondition(() => entity.CurrentEnergy.Value >= entity.TeleportEnergyCost.Value));
 
+            ICompositeCondition canRestoreEnergy = new CompositeCondition()
+                .Add(new FuncCondition(() => entity.IsDead.Value == false));
+
+
             entity
                 .AddMustDie(mustDie)
                 .AddMustSelfRelease(mustSelfrelease)
                 .AddCanApplyDamage(canApplyDamage)
-                .AddCanTeleport(canTeleport);
+                .AddCanTeleport(canTeleport)
+                .AddCanRestoreEnergy(canRestoreEnergy);
 
             entity.AddSystem(new EnergyRegenSystem())
-                  .AddSystem(new TeleportSystem())
-                  .AddSystem(new TeleportAreaDamageSystem(_collidersRegistryService))
-                  .AddSystem(new ApplyDamageSystem())
-                  .AddSystem(new DeathSystem())
-                  .AddSystem(new DisableCollidersOnDeathSystem())
-                  .AddSystem(new DeathProcessTimerSystem())
-                  .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
+                .AddSystem(new RestoreEnergySystem())
+                .AddSystem(new TeleportSystem())
+                .AddSystem(new SpendEnergyOnTeleportSystem())
+                .AddSystem(new TeleportAreaDamageSystem(_collidersRegistryService))
+                .AddSystem(new ApplyDamageSystem())
+                .AddSystem(new DeathSystem())
+                .AddSystem(new DisableCollidersOnDeathSystem())
+                .AddSystem(new DeathProcessTimerSystem())
+                .AddSystem(new SelfReleaseSystem(_entitiesLifeContext));
 
             _entitiesLifeContext.Add(entity);
 

@@ -54,6 +54,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
         private void OnTeleport()
         {
             _processedEntities.Clear();
+            Physics.SyncTransforms();
 
             _contacts.Count = Physics.OverlapSphereNonAlloc(
                 _transform.position,

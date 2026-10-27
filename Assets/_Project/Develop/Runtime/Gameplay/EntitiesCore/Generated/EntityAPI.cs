@@ -428,6 +428,29 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
 			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Energy.EnergyRegenPercent() { Value = value });
 		}
 
+		public Assets._Project.Develop.Runtime.Gameplay.Features.Energy.RestoreEnergyRequest RestoreEnergyRequestC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Energy.RestoreEnergyRequest>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> RestoreEnergyRequest => RestoreEnergyRequestC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRestoreEnergyRequest()
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Energy.RestoreEnergyRequest() { Value = new Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single>() });
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddRestoreEnergyRequest(Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveEvent<System.Single> value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Energy.RestoreEnergyRequest() { Value = value });
+		}
+
+		public Assets._Project.Develop.Runtime.Gameplay.Features.Energy.CanRestoreEnergy CanRestoreEnergyC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.Energy.CanRestoreEnergy>();
+
+		public Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition CanRestoreEnergy => CanRestoreEnergyC.Value;
+
+		public Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Entity AddCanRestoreEnergy(Assets._Project.Develop.Runtime.Utilities.Conditions.ICompositeCondition value)
+		{
+			return AddComponent(new Assets._Project.Develop.Runtime.Gameplay.Features.Energy.CanRestoreEnergy() { Value = value });
+		}
+
 		public Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.BodyContactDamage BodyContactDamageC => GetComponent<Assets._Project.Develop.Runtime.Gameplay.Features.ContactTakeDamage.BodyContactDamage>();
 
 		public Assets._Project.Develop.Runtime.Utilities.Reactive.ReactiveVariable<System.Single> BodyContactDamage => BodyContactDamageC.Value;

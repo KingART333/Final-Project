@@ -1,5 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
+using Assets._Project.Develop.Runtime.Utilities.Conditions;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Energy
 {
@@ -26,5 +27,15 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Energy
     public class EnergyRegenPercent : IEntityComponent
     {
         public ReactiveVariable<float> Value;
+    }
+
+    public class RestoreEnergyRequest : IEntityComponent
+    {
+        public ReactiveEvent<float> Value;
+    }
+
+    public class CanRestoreEnergy : IEntityComponent
+    {
+        public ICompositeCondition Value;
     }
 }
