@@ -50,7 +50,19 @@ namespace Assets._Project.Develop.Editor
                     sb.AppendLine($"\t\tpublic {GetValidTypeName(field.FieldType)} {componentName} => {modifiedComponentName}.{fieldName};");
                     sb.AppendLine();
 
-                    if(HasEmptyConstructor(field.FieldType))
+                    sb.AppendLine($"\t\tpublic bool TryGet{componentName}(out {GetValidTypeName(field.FieldType)} value)");
+                    sb.AppendLine("\t\t{");
+                    sb.AppendLine($"\t\t\tif (TryGetComponent(out {fullTypeName} component))");
+                    sb.AppendLine("\t\t\t{");
+                    sb.AppendLine("\t\t\t\tvalue = component.Value;");
+                    sb.AppendLine("\t\t\t\treturn true;");
+                    sb.AppendLine("\t\t\t}");
+                    sb.AppendLine("\t\t\tvalue = default;");
+                    sb.AppendLine("\t\t\treturn false;");
+                    sb.AppendLine("\t\t}");
+                    sb.AppendLine();
+
+                    if (HasEmptyConstructor(field.FieldType))
                     {
                         string initializer = "{ " + fieldName + " = new " + GetValidTypeName(field.FieldType) + "() }";
 

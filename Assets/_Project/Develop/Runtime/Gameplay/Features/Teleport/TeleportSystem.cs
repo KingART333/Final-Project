@@ -4,7 +4,6 @@ using Assets._Project.Develop.Runtime.Utilities.Conditions;
 using Assets._Project.Develop.Runtime.Utilities.Reactive;
 using System;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
 {
@@ -15,6 +14,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
         private ICompositeCondition _canTeleport;
 
         private ReactiveVariable<float> _teleportRadius;
+        private ReactiveVariable<Vector3> _teleportDestination;
 
         private Rigidbody _rigidbody;
 
@@ -27,6 +27,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
             _canTeleport = entity.CanTeleport;
 
             _teleportRadius = entity.TeleportRadius;
+            _teleportDestination = entity.TeleportDestination;
 
             _rigidbody = entity.Rigidbody;
 
@@ -41,9 +42,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.Teleport
                 return;
             }
 
-            Vector2 offset = Random.insideUnitCircle * _teleportRadius.Value;
+            Vector3 position = _rigidbody.transform.position;
 
-            _rigidbody.transform.position += new Vector3(offset.x, 0f, offset.y);
+            Vector3 toDestination = _teleportDestination.Value - position;
+            toDestination.y = 0f;
+
+            Vector3 offset = Vector3.ClampMagnitude(toDestination, _teleportRadius.Value);
+
+            _rigidbody.transform.position = position + offset;
 
             Debug.Log("Teleported");
             _teleportEvent.Invoke();

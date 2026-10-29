@@ -3,6 +3,7 @@ using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.CoroutinesManagement;
 using Assets._Project.Develop.Runtime.Utilities.SceneManagement;
 using Assets._Project.Develop.Runtime.Meta.Features.Wallet;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using System.Collections;
 using UnityEngine;
 using System;
@@ -19,6 +20,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
         [SerializeField] private TestGameplay _testGameplay;
         private EntitiesLifeContext _entitiesLifeContext;
+
+        private AIBrainsContext _brainsContext;
 
         public override void ProcessRegistrations(DIContainer container, IInputSceneArgs sceneArgs = null)
         {
@@ -42,6 +45,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
 
             _entitiesLifeContext = _container.Resolve<EntitiesLifeContext>();
 
+            _brainsContext = _container.Resolve<AIBrainsContext>();
+
             _testGameplay.Initialize(_container);
 
             yield break;
@@ -58,6 +63,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private void Update()
         {
             _entitiesLifeContext?.Update(Time.deltaTime);
+
+            _brainsContext?.Update(Time.deltaTime);
 
             if (Input.GetKeyDown(KeyCode.F))
             {

@@ -263,12 +263,14 @@ namespace Assets._Project.Develop.Runtime.Gameplay.EntitiesCore
                 .AddRestoreEnergyRequest()
                 .AddTeleportRequest()
                 .AddTeleportEvent()
+                .AddTeleportDestination()
                 .AddTeleportRadius(new ReactiveVariable<float>(8))
                 .AddTeleportEnergyCost(new ReactiveVariable<float>(30))
                 .AddTeleportDamage(new ReactiveVariable<float>(40))
                 .AddTeleportDamageRadius(new ReactiveVariable<float>(4))
                 .AddContactsDetectingMask(1 << LayerMask.NameToLayer("Characters"))
-                .AddContactCollidersBuffer(new Buffer<Collider>(64));
+                .AddContactCollidersBuffer(new Buffer<Collider>(64))
+                .AddCurrentTarget();
 
             ICompositeCondition mustDie = new CompositeCondition()
                 .Add(new FuncCondition(() => entity.CurrentHealth.Value <= 0));

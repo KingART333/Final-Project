@@ -2,6 +2,7 @@
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -11,6 +12,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         public static void Process(DIContainer container, GameplayInputArgs args)
         {
             container.RegisterAsSingle(CreateEntitiesFactory);
+
+            container.RegisterAsSingle(CreateAIBrainsContext);
+
+            container.RegisterAsSingle(CreateBrainsFactory);
 
             container.RegisterAsSingle(CreateEntitiesLifeContext);
 
@@ -37,6 +42,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private static EntitiesFactory CreateEntitiesFactory(DIContainer c)
         {
             return new EntitiesFactory(c);
+        }
+
+        private static AIBrainsContext CreateAIBrainsContext(DIContainer c)
+        {
+            return new AIBrainsContext();
+        }
+
+        private static BrainsFactory CreateBrainsFactory(DIContainer c)
+        {
+            return new BrainsFactory(c);
         }
     }
 }
