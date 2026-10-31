@@ -27,7 +27,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.Reactive
 
                 _value = value;
 
-                if(_value.Equals(oldValue) == false)
+                if (EqualityComparer<T>.Default.Equals(_value, oldValue) == false)
                     Invoke(oldValue, value);
             }
         }

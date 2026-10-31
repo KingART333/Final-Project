@@ -20,6 +20,7 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
         private readonly IInputService _inputService;
         private readonly EntitiesLifeContext _entitiesLifeContext;
         private const float EnergySavingThreshold = 0.4f;
+        private const float MouseRotationSensitivity = 10f;
 
         public BrainsFactory(DIContainer container)
         {
@@ -145,6 +146,55 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Features.AI
             _brainsContext.SetFor(entity, brain);
 
             return brain;
+        }
+
+        public StateMachineBrain CreateMainHeroManualBrain(Entity entity)
+        {
+            AiStateMachine combatState = CreateManualAttackStateMachine(entity);
+
+            PlayerInputMovementState movementState = new PlayerInputMovementState(entity, _inputService);
+
+            ICondition fromMovementToCombatStateCondition = new FuncCondition(() => _inputService.Direction == Vector3.zero);
+            ICondition fromCombatToMovementStateCondition = new FuncCondition(() => _inputService.Direction != Vector3.zero);
+
+            AiStateMachine rootStateMachine = new AiStateMachine();
+
+            rootStateMachine.AddState(movementState);
+            rootStateMachine.AddState(combatState);
+
+            rootStateMachine.AddTransition(movementState, combatState, fromMovementToCombatStateCondition);
+            rootStateMachine.AddTransition(combatState, movementState, fromCombatToMovementStateCondition);
+
+            StateMachineBrain brain = new StateMachineBrain(rootStateMachine);
+            _brainsContext.SetFor(entity, brain);
+
+            return brain;
+        }
+
+        private AiStateMachine CreateManualAttackStateMachine(Entity entity)
+        {
+            MouseRotationState mouseRotationState = new MouseRotationState(entity, _inputService, MouseRotationSensitivity);
+
+            AttackTriggerState attackTriggerState = new AttackTriggerState(entity);
+
+            ICondition canAttack = entity.CanStartAttack;
+            ReactiveVariable<bool> inAttackProcess = entity.InAttackProcess;
+
+            ICompositeCondition fromRotationToAttackCondition = new CompositeCondition()
+                .Add(canAttack)
+                .Add(new FuncCondition(() => _inputService.IsAttackButtonPressed));
+
+            ICondition fromAttackToRotationCondition = new FuncCondition(() => inAttackProcess.Value == false);
+
+            AiStateMachine stateMachine = new AiStateMachine();
+
+            stateMachine.AddState(mouseRotationState);
+            stateMachine.AddState(attackTriggerState);
+
+            stateMachine.AddTransition(mouseRotationState, attackTriggerState, fromRotationToAttackCondition);
+            stateMachine.AddTransition(attackTriggerState, mouseRotationState, fromAttackToRotationCondition);
+
+            return stateMachine;
         }
 
         private AiStateMachine CreateRandomMovementStatMachine(Entity entity)

@@ -1,8 +1,10 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore.Mono;
+using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
+using Assets._Project.Develop.Runtime.Gameplay.Features.InputFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
 using Assets._Project.Develop.Runtime.Utilities.AssetsManagement;
-using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
+using Assets._Project.Develop.Runtime.Utilities.Timer;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
@@ -16,6 +18,10 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
             container.RegisterAsSingle(CreateAIBrainsContext);
 
             container.RegisterAsSingle(CreateBrainsFactory);
+
+            container.RegisterAsSingle(CreateTimerServiceFactory);
+
+            container.RegisterAsSingle<IInputService>(CreateInputService);
 
             container.RegisterAsSingle(CreateEntitiesLifeContext);
 
@@ -52,6 +58,16 @@ namespace Assets._Project.Develop.Runtime.Gameplay.Infrastructure
         private static BrainsFactory CreateBrainsFactory(DIContainer c)
         {
             return new BrainsFactory(c);
+        }
+
+        private static TimerServiceFactory CreateTimerServiceFactory(DIContainer c)
+        {
+            return new TimerServiceFactory(c);
+        }
+
+        private static DesktopInput CreateInputService(DIContainer c)
+        {
+            return new DesktopInput();
         }
     }
 }

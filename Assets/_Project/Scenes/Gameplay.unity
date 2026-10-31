@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c5e8fab2ed7359419d3be0d9f6b70d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _useSmartTeleporter: 0
 --- !u!1 &1153647796
 GameObject:
   m_ObjectHideFlags: 0

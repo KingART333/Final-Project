@@ -1,12 +1,6 @@
 ﻿using Assets._Project.Develop.Runtime.Gameplay.EntitiesCore;
 using Assets._Project.Develop.Runtime.Gameplay.Features.AI;
-using Assets._Project.Develop.Runtime.Gameplay.Features.MovementFeature;
 using Assets._Project.Develop.Runtime.Infrastructure.DI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets._Project.Develop.Runtime.Gameplay
@@ -37,6 +31,8 @@ namespace Assets._Project.Develop.Runtime.Gameplay
             _entitiesFactory.CreateGhost(Vector3.zero + Vector3.forward * 5);
             _teleporter = _entitiesFactory.CreateTeleporter(Vector3.zero + Vector3.right * 5);
 
+            _brainsFactory.CreateMainHeroManualBrain(_entity);
+
             if (_useSmartTeleporter)
                 _brainsFactory.CreateTeleporterSmartBrain(_teleporter, 3f);
             else
@@ -50,20 +46,13 @@ namespace Assets._Project.Develop.Runtime.Gameplay
             if (_isRunning == false)
                 return;
 
+            //for testing
             if (Input.GetKeyDown(KeyCode.Space))
                 _entity.TakeDamageRequest.Invoke(50);
-
-            if (Input.GetKeyDown(KeyCode.R))
-                _entity.StartAttackRequest.Invoke();
 
             //for testing
             if (Input.GetKeyDown(KeyCode.Y))
                 _teleporter.TakeDamageRequest.Invoke(50);
-
-            Vector3 input = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical"));
-
-            _entity.MoveDirection.Value = input;
-            _entity.RotationDirection.Value = input;
         }
     }
 }
