@@ -30,7 +30,7 @@ namespace Assets._Project.Develop.Runtime.Utilities.Timer
             _currentTime = new ReactiveVariable<float>();
         }
 
-        public IReadonlyEvent CooldownEnded => _cooldownEnded;
+        public IReadOnlyEvent CooldownEnded => _cooldownEnded;
         public IReadOnlyVariable<float> CurrentTime => _currentTime;
         public bool IsOver => _currentTime.Value <= 0;
 

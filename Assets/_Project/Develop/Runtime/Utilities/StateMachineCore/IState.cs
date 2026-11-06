@@ -4,8 +4,8 @@ namespace Assets._Project.Develop.Runtime.Utilities.StateMachineCore
 {
     public interface IState
     {
-        IReadonlyEvent Entered {  get; }
-        IReadonlyEvent Exited { get; }
+        IReadOnlyEvent Entered {  get; }
+        IReadOnlyEvent Exited { get; }
 
         void Enter();
         void Exit();

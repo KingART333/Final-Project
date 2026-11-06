@@ -71,7 +71,7 @@ namespace Assets._Project.Develop.Runtime.Meta.Infrastructure
 
             if (Input.GetKeyUp(KeyCode.S))
             {
-                _coroutinesPerformer.StartPerform(_playerDataProvider.Save());
+                _coroutinesPerformer.StartPerform(_playerDataProvider.SaveAsync());
                 Debug.Log("Saving was called");
             }
         }
